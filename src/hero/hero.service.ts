@@ -1,4 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
+import * as md5 from 'md5';
 
 @Injectable()
-export class HeroService {}
+export class HeroService {
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly config: ConfigService,
+  ) {}
+
+  async listHeroes(name: string): Promise<Record<string, any>> {
+    const url = this.getRequestUrl(name);
+    let response;
+
+    try {
+      response = await firstValueFrom(this.httpService.get(url));
+    } catch (error) {
+      throw new BadRequestException(error.response.request);
+    }
+
+    return response.data;
+  }
+
+  getRequestUrl(name: string): string {
+    const ts = this.config.get<string>('API_MARVEL_TS');
+    const privateKey = this.config.get<string>('API_MARVEL_API_PRIVATE_KEY');
+    const publicKey = this.config.get<string>('API_MARVEL_API_PUBLIC_KEY');
+
+    const hash = md5(`${ts}${privateKey}${publicKey}`);
+
+    return `${this.config.get<string>(
+      'API_MARVEL_URL',
+    )}/v1/public/characters?nameStartsWith=${name}&ts=${ts}&apikey=${publicKey}&hash=${hash}`;
+  }
+}
