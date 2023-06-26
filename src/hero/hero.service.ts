@@ -3,12 +3,19 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import * as md5 from 'md5';
+import {
+  InMemoryDBService,
+  InjectInMemoryDBService,
+} from '@nestjs-addons/in-memory-db';
 
+import { HeroEntity } from './entities/hero.entity';
 @Injectable()
 export class HeroService {
   constructor(
     private readonly httpService: HttpService,
     private readonly config: ConfigService,
+    @InjectInMemoryDBService('hero')
+    private heroEntityService: InMemoryDBService<HeroEntity>,
   ) {}
 
   async listHeroes(name: string): Promise<Record<string, any>> {
