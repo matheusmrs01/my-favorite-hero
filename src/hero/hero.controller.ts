@@ -49,3 +49,13 @@ export class HeroController {
   async listFavoriteHeroes() {
     return await this.heroService.listFavoriteHeroes();
   }
+
+  @Delete(':id')
+  @ApiOperation({
+    operationId: 'deleteHero',
+    summary: 'Removes a hero from the favorites list.',
+  })
+  async deleteHero(@Param('id') id: string) {
+    return await this.heroService.deleteHero(id);
+  }
+}

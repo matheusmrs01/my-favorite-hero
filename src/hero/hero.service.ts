@@ -47,6 +47,15 @@ export class HeroService {
     return this.heroEntityService.getAll();
   }
 
+  async deleteHero(id) {
+    if (!this.heroEntityService.get(id)) {
+      throw new BadRequestException(`There is no hero with id ${id}.`);
+    }
+
+    this.heroEntityService.delete(id);
+    return { status: 200, message: 'Hero successfully unchecked.' };
+  }
+
   private getRequestUrl(name: string): string {
     const ts = this.config.get<string>('API_MARVEL_TS');
     const privateKey = this.config.get<string>('API_MARVEL_API_PRIVATE_KEY');
