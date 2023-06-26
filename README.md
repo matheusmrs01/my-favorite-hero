@@ -1,73 +1,67 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Descrição
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Esse projeto foi criado em [Nestjs](https://github.com/nestjs/nest) e utilizando a api da [Marvel for developers](https://developer.marvel.com/) para buscar os heróis de sua escolha. A ideia principal é listar todos os hérois da Marvel que comecem com determinado nome, e, desses heróis, é possível marcar e desmarcar os favoritos, além de listá-los.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Instalação
+A instalação pode ser feita de 2 maneiras, utilizando o Docker ou rodando o projeto na máquina.
 
-## Description
+Lembrando que em ambas as instalações, é necessário que crie um arquivo `.env` na raiz do projeto, esse arquivo vai conter as seguintes variáveis:
+```
+APP_NAME='my-favorite-hero'
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+API_MARVEL_URL='https://gateway.marvel.com:443'
 
-## Installation
-
-```bash
-$ npm install
+API_MARVEL_TS=1
+API_MARVEL_PRIVATE_KEY='Chave privada que é pega no site na marvel'
+API_MARVEL_PUBLIC_KEY='Chave publica que tambem é pega no site na marvel'
 ```
 
-## Running the app
+## Docker
+```bash
+# Basta rodar o seguinte comando na raiz do projeto.
+$ docker build --pull --rm -f "Dockerfile" -t myfavoritehero:latest "."
+```
+
+Com isso você terá a imagem docker do projeto, e pode rodar do jeito que você preferir.
+
+
+## Rodando o projeto diretamente na máquina
+
+Para rodar o projeto na máquina primeiro você vai ter que ter instalado alguns itens, sendo eles:
+
+- Node: Você pode instalar a versão `latest` do node. 
+- Nestjs: Depois do node instalado, basta instalar o Nestjs globalmente com o comando --> npm i -g @nestjs/cli
+- Após ter instalado o Nestjs globalmente, você vai precisar instalar as dependências do projeto, usando o comando --> npm install --force 
+
+
+OBS: o --force é usado para poder instalar a dependência "@nestjs-addons/in-memory-db" que é utilizada para salvar os dados em memória, ela é uma lib mais antiga então não tem suporte para as versões mais novas do Nestjs, por isso deve ser forçada a ser instalada. Claro que isso acontece apenas porque esse ambiente é uma ambiente de testes, então, não tem problema a utilização dessa lib.
+
+## Rodando o APP
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
+# Lembrando que isso é apenas para quem fez a instalação na maquina.
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
+## Testes
 
 ```bash
-# unit tests
+# Testes unitários
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+## Rotas da API
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Tanto quem fez a instalação na máquina quanto pelo Docker, vai ter acesso às rotas da aplicação, levando isso em consideração, vamos utilizar apenas os caminhos para explicar as rotas.
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- GET -> ``/api/hero/${nome_do_herói}``: Essa rota é utilizada para retornar os dados da Marvel, onde na variável `nome_do_herói` vai ser utilizada para passar o nome do herói.
+- GET -> `/api/hero`: Rota utilizada para retornar uma lista com os heróis favoritos.
+- DELETE -> `/api/hero/${id_heroi}`: Rota utilizada para remover um herói da lista de favoritos, onde a variável `id_heroi` vai ser utilizada para passar o nome do herói.
+- POST -> `/api/hero`: Rota utilizada para marcar um herói como favorito. Nessa rota deve ser passado um body com a seguinte estrutura:
+```json
+{
+    "id": "123",
+    "name": "Capitão américa",
+    "description": "Descrição sobre o capitão américa"
+}
+```
