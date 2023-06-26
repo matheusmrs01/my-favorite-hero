@@ -9,6 +9,8 @@ import {
 } from '@nestjs-addons/in-memory-db';
 
 import { HeroEntity } from './entities/hero.entity';
+import { HeroRequestDto } from './dto/heroRequest.dto';
+
 @Injectable()
 export class HeroService {
   constructor(
@@ -40,6 +42,11 @@ export class HeroService {
 
     return this.heroEntityService.create(hero);
   }
+
+  async listFavoriteHeroes(): Promise<HeroEntity[]> {
+    return this.heroEntityService.getAll();
+  }
+
   private getRequestUrl(name: string): string {
     const ts = this.config.get<string>('API_MARVEL_TS');
     const privateKey = this.config.get<string>('API_MARVEL_API_PRIVATE_KEY');

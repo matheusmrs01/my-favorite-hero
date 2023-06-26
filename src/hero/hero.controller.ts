@@ -36,4 +36,16 @@ export class HeroController {
   async createHero(@Body() data: HeroRequestDto) {
     return await this.heroService.createHero(data);
   }
-}
+
+  @Get()
+  @ApiOperation({
+    operationId: 'listFavoriteHeroes',
+    summary: 'List of favorite heroes',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of favorite heroes.',
+  })
+  async listFavoriteHeroes() {
+    return await this.heroService.listFavoriteHeroes();
+  }
