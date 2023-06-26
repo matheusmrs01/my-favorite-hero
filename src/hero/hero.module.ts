@@ -4,15 +4,11 @@ import { ConfigModule } from '@nestjs/config';
 
 import { HeroService } from './hero.service';
 import { HeroController } from './hero.controller';
-import { InMemoryDBModule } from '@nestjs-addons/in-memory-db';
+import { HeroRepository } from './entities/hero.repository';
 
 @Module({
-  imports: [
-    HttpModule,
-    ConfigModule.forRoot(),
-    InMemoryDBModule.forFeature('hero'),
-  ],
+  imports: [HttpModule, ConfigModule.forRoot()],
   controllers: [HeroController],
-  providers: [HeroService],
+  providers: [HeroService, HeroRepository],
 })
 export class HeroModule {}
