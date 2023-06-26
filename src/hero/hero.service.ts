@@ -31,7 +31,16 @@ export class HeroService {
     return response.data;
   }
 
-  getRequestUrl(name: string): string {
+  async createHero(hero: HeroRequestDto): Promise<HeroEntity> {
+    if (this.heroEntityService.get(hero.id)) {
+      throw new BadRequestException(
+        `Hero with id ${hero.id} has already been marked as favorite.`,
+      );
+    }
+
+    return this.heroEntityService.create(hero);
+  }
+  private getRequestUrl(name: string): string {
     const ts = this.config.get<string>('API_MARVEL_TS');
     const privateKey = this.config.get<string>('API_MARVEL_API_PRIVATE_KEY');
     const publicKey = this.config.get<string>('API_MARVEL_API_PUBLIC_KEY');

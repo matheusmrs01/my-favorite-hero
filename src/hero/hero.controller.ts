@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { HeroService } from './hero.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HeroRequestDto } from './dto/heroRequest.dto';
@@ -24,4 +24,16 @@ export class HeroController {
     return await this.heroService.listHeroes(name);
   }
 
+  @Post()
+  @ApiOperation({
+    operationId: 'createHero',
+    summary: 'Mark a hero as your favorite.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Hero marked as favorite.',
+  })
+  async createHero(@Body() data: HeroRequestDto) {
+    return await this.heroService.createHero(data);
+  }
 }
