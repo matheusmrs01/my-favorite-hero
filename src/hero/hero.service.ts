@@ -54,8 +54,8 @@ export class HeroService {
 
   private getRequestUrl(name: string): string {
     const ts = this.config.get<string>('API_MARVEL_TS');
-    const privateKey = this.config.get<string>('API_MARVEL_API_PRIVATE_KEY');
-    const publicKey = this.config.get<string>('API_MARVEL_API_PUBLIC_KEY');
+    const privateKey = this.config.get<string>('API_MARVEL_PRIVATE_KEY');
+    const publicKey = this.config.get<string>('API_MARVEL_PUBLIC_KEY');
 
     const hash = md5(`${ts}${privateKey}${publicKey}`);
 
