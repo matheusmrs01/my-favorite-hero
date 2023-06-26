@@ -3,21 +3,17 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import * as md5 from 'md5';
-import {
-  InMemoryDBService,
-  InjectInMemoryDBService,
-} from '@nestjs-addons/in-memory-db';
 
 import { HeroEntity } from './entities/hero.entity';
 import { HeroRequestDto } from './dto/heroRequest.dto';
+import { HeroRepository } from './entities/hero.repository';
 
 @Injectable()
 export class HeroService {
   constructor(
     private readonly httpService: HttpService,
     private readonly config: ConfigService,
-    @InjectInMemoryDBService('hero')
-    private heroEntityService: InMemoryDBService<HeroEntity>,
+    private heroRepository: HeroRepository,
   ) {}
 
   async listHeroes(name: string): Promise<Record<string, any>> {
@@ -34,25 +30,25 @@ export class HeroService {
   }
 
   async createHero(hero: HeroRequestDto): Promise<HeroEntity> {
-    if (this.heroEntityService.get(hero.id)) {
+    if (this.heroRepository.get(hero.id)) {
       throw new BadRequestException(
         `Hero with id ${hero.id} has already been marked as favorite.`,
       );
     }
 
-    return this.heroEntityService.create(hero);
+    return this.heroRepository.create(hero);
   }
 
   async listFavoriteHeroes(): Promise<HeroEntity[]> {
-    return this.heroEntityService.getAll();
+    return this.heroRepository.getAll();
   }
 
   async deleteHero(id) {
-    if (!this.heroEntityService.get(id)) {
+    if (!this.heroRepository.get(id)) {
       throw new BadRequestException(`There is no hero with id ${id}.`);
     }
 
-    this.heroEntityService.delete(id);
+    this.heroRepository.delete(id);
     return { status: 200, message: 'Hero successfully unchecked.' };
   }
 
